@@ -85,7 +85,7 @@ selected_module:
   # 语音活动检测模块，默认使用SileroVAD模型
   VAD: SileroVAD
   # 语音识别模块，默认使用FunASR本地模型
-  ASR: FunASR
+  ASR: DoubaoASR
   # 将根据配置名称对应的type调用实际的LLM适配器
   LLM: ChatGLMLLM
   # TTS将根据配置名称对应的type调用实际的TTS适配器
@@ -125,6 +125,7 @@ Intent:
       # play_music是服务器自带的音乐播放，hass_play_music是通过home assistant控制的独立外部程序音乐播放
       # 如果用了hass_play_music，就不要开启play_music，两者只留一个
       - play_music
+      - rag_pipeline
       #- hass_get_state
       #- hass_set_state
       #- hass_play_music
@@ -183,8 +184,8 @@ ASR:
     output_dir: tmp/
   DoubaoASR:
     type: doubao
-    appid: 你的火山引擎语音合成服务appid
-    access_token: 你的火山引擎语音合成服务access_token
+    appid: 36_kc_16184714
+    access_token: KmRRp4Ecmu_kc_ZVnYKKr9qRo107w747_Vk6
     cluster: volcengine_input_common
     output_dir: tmp/
 VAD:

@@ -17,6 +17,7 @@ class IntentProviderBase(ABC):
             "get_lunar": "用于获取今天的阴历/农历和黄历信息",
             "get_time": "获取今天日期或者当前时间信息",
             "continue_chat": "继续聊天",
+            "rag_pipeline": "检索增强生成(RAG), 用户希望使用检索增强生成(RAG)功能",
         })
 
     def set_llm(self, llm):
