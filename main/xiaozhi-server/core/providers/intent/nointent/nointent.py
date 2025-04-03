@@ -16,5 +16,5 @@ class IntentProvider(IntentProviderBase):
         Returns:
             固定返回"继续聊天"
         """
-        logger.bind(tag=TAG).debug("Using NoIntentProvider, always returning continue chat")
+        logger.bind(tag=TAG).info("Using NoIntentProvider, always returning continue chat")
         return self.intent_options["continue_chat"]

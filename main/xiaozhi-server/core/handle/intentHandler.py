@@ -61,11 +61,11 @@ async def analyze_intent_with_llm(conn, text):
 
 
 async def process_intent_result(conn, intent_result, original_text):
+    if intent_result == "继续聊天":
+        return False
     """处理意图识别结果"""
     try:
-        # 尝试将结果解析为JSON
         intent_data = json.loads(intent_result)
-
         # 检查是否有function_call
         if "function_call" in intent_data:
             # 直接从意图识别获取了function_call

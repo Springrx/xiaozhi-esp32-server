@@ -16,7 +16,7 @@ logger = setup_logging()
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 ES_HOST = "https://10.177.44.113:9200/"
 ES_USER = "elastic"
-ES_PASSWORD = "kckckck"
+ES_PASSWORD = "password_from_yulu"
 
 rag_pipeline_function_desc = {
                 "type": "function",
@@ -53,7 +53,7 @@ class RAGSystem:
             top_k=5
         )
         self.query_embedder = SentenceTransformersTextEmbedder(
-            model="sentence-transformers/distiluse-base-multilingual-cased-v2"
+            model="/your_path/distiluse-base-multilingual-cased-v2"
         )
         self.joiner = DocumentJoiner(weights=[0.6, 0.4])  # 混合权重
         self.prompt_builder = PromptBuilder(
@@ -67,11 +67,10 @@ class RAGSystem:
                     '''
         )
         self.generator = OpenAIGenerator(
-            api_key=Secret.from_token("sk-a8b972f05876_kc_46a29c56c6d7da56e256"),
-            api_base_url="https://api.deepseek.com",
-            # model="deepseek-reasoner"
-            model="deepseek-chat"
-        )
+                    api_key=Secret.from_token("your_api_key"),
+                    api_base_url="your_api_base_url",
+                    model="your_model"
+                )
         self.answer_builder = AnswerBuilder()
 
         # 构建管道
@@ -102,6 +101,7 @@ class RAGSystem:
     def run(self, question: str, top_k: int = 5):
         try:
             # 运行管道
+            logger.bind(tag=TAG).info(f"开始运行pipeline,question:{question}")
             results = self.pipeline.run({
                 "query_embedder": {"text": question},
                 "bm25_retriever": {"query": question},
@@ -109,19 +109,21 @@ class RAGSystem:
                 "prompt_builder": {"question": question},
                 "answer_builder": {"query": question}
             })
-
+            logger.bind(tag=TAG).info(f"pipeline完成")
             if results["answer_builder"]["answers"]:
                 return results["answer_builder"]["answers"][0].data
             else:
                 return "无法找到相关信息"
         except Exception as e:
             return f"发生错误：{str(e)}"
-
-def rag_pipeline_function(question: str):
-    return question
+def streaming_callback(token):
+    logger.bind(tag=TAG).info(f"流式输出: {token}")
+    return token
 @register_function('rag_pipeline', rag_pipeline_function_desc, ToolType.WAIT)
-def rag_pipeline( question: str):
-    """RAG"""
-    rag_system = RAGSystem()
-    res = rag_system.run(question)
-    return ActionResponse(action=Action.RESPONSE, result="RAG已处理", response=res)
+def rag_pipeline(question: str):
+    logger.bind(tag=TAG).info(f"RAG开始处理问题: {question}")
+    rag_system = RAGSystem()   
+    logger.bind(tag=TAG).info(f"初始化完成")
+    rag_res = rag_system.run(question)
+    # res=rag_system.set_streaming_callback(streaming_callback)
+    return ActionResponse(action=Action.RESPONSE, result="RAG已处理", response=rag_res)
