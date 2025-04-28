@@ -17,5 +17,4 @@ class IntentProvider(IntentProviderBase):
             固定返回"继续聊天"
         """
         logger.bind(tag=TAG).debug("Using functionCallProvider, always returning continue chat")
-        # return self.intent_options["rag_pipeline"]
         return self.intent_options["continue_chat"] 

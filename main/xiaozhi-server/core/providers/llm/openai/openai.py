@@ -59,7 +59,6 @@ class LLMProvider(LLMProviderBase):
                 stream=True,
                 tools=functions
             )
-
             for chunk in stream:
                 yield chunk.choices[0].delta.content, chunk.choices[0].delta.tool_calls
 

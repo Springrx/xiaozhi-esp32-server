@@ -45,7 +45,6 @@ class IntentProvider(IntentProviderBase):
             "5. 获取当天日期时间: {\"function_call\": {\"name\": \"get_time\"}}\n"
             "6. 获取当前黄历意图: {\"function_call\": {\"name\": \"get_lunar\"}}\n"
             "7. 继续聊天意图: {\"function_call\": {\"name\": \"continue_chat\"}}\n"
-            "8. 检索增强生成(RAG)意图: {\"function_call\": {\"name\": \"rag_pipeline\", \"arguments\": {\"question\": \"问题\"}}}\n"
             "\n"
             "注意:\n"
             "- 播放音乐：无歌名时，song_name设为\"random\"\n"
@@ -53,7 +52,7 @@ class IntentProvider(IntentProviderBase):
             "- 查询新闻：无类别时，category设为null；查询详情时，detail设为true\n"
             "- 如果没有明显的意图，应按照继续聊天意图处理\n"
             "- 只返回纯JSON，不要任何其他内容\n"
-            "\n"
+            "- 返回的字数越少越好\n"
             "示例分析:\n"
             "```\n"
             "用户: 你好小智\n"
@@ -102,6 +101,7 @@ class IntentProvider(IntentProviderBase):
             "可用的音乐名称:\n"
             
         )
+        # "8. 检索增强生成(RAG)意图: {\"function_call\": {\"name\": \"rag_pipeline\", \"arguments\": {\"question\": \"问题\"}}}\n"        
         return prompt
         
     def clean_cache(self):

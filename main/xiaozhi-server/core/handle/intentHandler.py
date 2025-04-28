@@ -24,7 +24,7 @@ async def handle_user_intent(conn, text):
         return False
     # 使用LLM进行意图分析
     intent_result = await analyze_intent_with_llm(conn, text)
-    if not intent_result:
+    if not intent_result or intent_result=='继续聊天':
         return False
     # 处理各种意图
     return await process_intent_result(conn, intent_result, text)
@@ -61,8 +61,6 @@ async def analyze_intent_with_llm(conn, text):
 
 
 async def process_intent_result(conn, intent_result, original_text):
-    if intent_result == "继续聊天":
-        return False
     """处理意图识别结果"""
     try:
         intent_data = json.loads(intent_result)
@@ -88,7 +86,7 @@ async def process_intent_result(conn, intent_result, original_text):
                 "arguments": function_args,
             }
 
-            await send_stt_message(conn, original_text)
+            # await send_stt_message(conn, original_text)
 
             # 使用executor执行函数调用和结果处理
             def process_function_call():
